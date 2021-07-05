@@ -15,7 +15,7 @@ const usersGet = (req, res = response) => {
 
 const usersPut = async (req, res = response) => {
   const id = req.params.id;
-  const { password, google,email,  ...rest } = req.body;
+  const { _id, password, google,email,  ...rest } = req.body;
 
   // TODO: Validar con la base de datos
 

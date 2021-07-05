@@ -15,15 +15,15 @@ const emailAvailable = async (email) => {
   }
 }
 
-// const existEmail = await User.findOne({ email });
-// console.log(existEmail);
-// if (existEmail) {
-//   return res.status(400).json({
-//     msg: 'El correo ya está registrado',
-//   });
-// }
+const existUserById = async (id) => {
+  const userExist = await User.findById(id)
+  if(!userExist) {
+    throw new Error(`El ${id} no existe`)
+  }
+}
 
 module.exports = {
   isRoleValid,
-  emailAvailable
+  emailAvailable,
+  existUserById
 }
