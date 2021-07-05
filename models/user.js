@@ -34,5 +34,10 @@ const userSchema = Schema({
 
 });
 
+//Metodo para retornar en la respuesta solo los valores que yo quiera
+userSchema.methods.toJSON = function() {
+  const  {__v, password, ...user } = this.toObject();
+  return user;
+}
 
 module.exports = model( 'User', userSchema)
