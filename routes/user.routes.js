@@ -7,7 +7,7 @@ const {
   usersPost,
   usersDelete,
 } = require('../controllers/users');
-const { isRoleValid } = require('../helpers/db-validators');
+const { isRoleValid, emailAvailable } = require('../helpers/db-validators');
 
 
 const router = Router();
@@ -25,10 +25,12 @@ router.post(
       'El password es obligatorio y tener mas de 6 letras'
     ).isLength({ min: 6 }),
     check('email', 'El correo no es valido').isEmail(),
+    check('email').custom(emailAvailable),
     //check('role', 'No es un rol valido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
     check('role').custom(isRoleValid),
     //La linea de arriba es lo mismo que la que esta abajo
     //check('role').custom(role => isRoleValid(role)),
+
     validateFields,
   ],
   usersPost
