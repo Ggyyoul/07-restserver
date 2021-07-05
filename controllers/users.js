@@ -2,20 +2,20 @@ const { response } = require('express');
 const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 
-const usersGet = (req, res = response) => {
-  // http://localhost:8080/api/users?q=hola&apiKey=1664684
-  const { q, name = 'No name', apiKey } = req.query;
+const usersGet = async (req, res = response) => {
+  
+  const { limit = 5, from = 1 } = req.query
+  const users = await User.find()
+    .skip(Number(from))
+    .limit(Number(limit));
   res.json({
-    msg: 'get API - controller',
-    q,
-    name,
-    apiKey,
+    users,
   });
 };
 
 const usersPut = async (req, res = response) => {
   const id = req.params.id;
-  const { _id, password, google,email,  ...rest } = req.body;
+  const { _id, password, google, email, ...rest } = req.body;
 
   // TODO: Validar con la base de datos
 
@@ -25,10 +25,9 @@ const usersPut = async (req, res = response) => {
     rest.password = bcryptjs.hashSync(password, salt);
   }
 
-  const user = await User.findByIdAndUpdate(id, rest)
+  const user = await User.findByIdAndUpdate(id, rest);
 
   res.json({
-    msg: 'Put Api - controller',
     user,
   });
 };
