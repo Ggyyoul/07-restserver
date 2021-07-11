@@ -6,7 +6,9 @@ const usersGet = async (req, res = response) => {
   
   const { limit = 5, from = 1 } = req.query
   const users = await User.find()
+    //el skips es para determinar desde que registro quiero traer
     .skip(Number(from))
+    // el limit es para terminar cuando registros me quiero traer
     .limit(Number(limit));
   res.json({
     users,
