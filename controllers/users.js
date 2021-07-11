@@ -63,9 +63,20 @@ const usersPost = async (req, res = response) => {
   });
 };
 
-const usersDelete = (req, res = response) => {
+const usersDelete = async (req, res = response) => {
+
+  const { id } = req.params;
+
+  // borrar fisicamente
+  // mala forma porque podemos perfer la referencia hacia el resto de datos
+  // const user = await User.findByIdAndDelete(id)
+
+  // ELIMINAR PERO CAMBIANDO EL ESTADO DEL REGISTRO A FALSO
+  const user = await User.findByIdAndUpdate(id, {state: false})
+
   res.json({
-    msg: 'Delete Api',
+    user
+
   });
 };
 module.exports = {
