@@ -5,23 +5,10 @@ const User = require('../models/user');
 const usersGet = async (req, res = response) => {
   const { limit, from } = req.query;
 
-  // const allUsers = await User.countDocuments({ state: true });
-  // const users = await User.find({ state: true })
-  //el skips es para determinar desde que registro quiero traer
-  // .skip(Number(from))
-  // el limit es para terminar cuando registros me quiero traer
-  // .limit(Number(limit));
-
-  // const resp = await Promise.all([
-  //   User.countDocuments({ state: true }),
-  //   User.find({ state: true }).skip(Number(from)).limit(Number(limit)),
-  // ]);
-
   const [totalUsers, users] = await Promise.all([
     User.countDocuments({ state: true }),
     User.find({ state: true }).skip(Number(from)).limit(Number(limit)),
   ]);
-
 
   res.json({
     totalUsers,
@@ -67,15 +54,14 @@ const usersDelete = async (req, res = response) => {
 
   const { id } = req.params;
 
-  // borrar fisicamente
-  // mala forma porque podemos perfer la referencia hacia el resto de datos
-  // const user = await User.findByIdAndDelete(id)
+  //Este lo traigo desde el validate-jwt.js
+  const uid = req.uid;
 
-  // ELIMINAR PERO CAMBIANDO EL ESTADO DEL REGISTRO A FALSO
   const user = await User.findByIdAndUpdate(id, {state: false})
 
   res.json({
-    user
+    user,
+    uid
 
   });
 };
