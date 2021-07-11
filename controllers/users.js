@@ -3,15 +3,29 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 
 const usersGet = async (req, res = response) => {
-  
-  const { limit = 5, from = 1 } = req.query
-  const users = await User.find()
-    //el skips es para determinar desde que registro quiero traer
-    .skip(Number(from))
-    // el limit es para terminar cuando registros me quiero traer
-    .limit(Number(limit));
+  const { limit = 5, from = 1 } = req.query;
+
+  // const allUsers = await User.countDocuments({ state: true });
+  // const users = await User.find({ state: true })
+  //el skips es para determinar desde que registro quiero traer
+  // .skip(Number(from))
+  // el limit es para terminar cuando registros me quiero traer
+  // .limit(Number(limit));
+
+  // const resp = await Promise.all([
+  //   User.countDocuments({ state: true }),
+  //   User.find({ state: true }).skip(Number(from)).limit(Number(limit)),
+  // ]);
+
+  const [totalUsers, users] = await Promise.all([
+    User.countDocuments({ state: true }),
+    User.find({ state: true }).skip(Number(from)).limit(Number(limit)),
+  ]);
+
+
   res.json({
-    users,
+    totalUsers,
+    users
   });
 };
 
